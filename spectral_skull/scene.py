@@ -246,6 +246,21 @@ class Scene:
 
     def image(self, seconds:float) -> Image.Image:
         t=(seconds%DURATION)/DURATION
+        # Last frames return to the reference skull, with a moving glint
+        # that prevents indexed GIF exports from merging duplicate frames.
+        if t>=.955:
+            restored=Image.new('RGBA',(self.size,self.size))
+            restored.alpha_composite(self.art,self.artpos)
+            if t < .99:
+                q=(t-.955)/.035
+                x=round(self.size*(.31+.29*q))
+                y=round(self.size*(.62-.025*math.sin(q*math.pi)))
+                r=max(2,self.size//160)
+                d=ImageDraw.Draw(restored,'RGBA')
+                d.line([(x-r*2,y),(x+r*2,y)],fill=(255,238,181,230),width=2)
+                d.line([(x,y-r*2),(x,y+r*2)],fill=(255,238,181,230),width=2)
+                d.ellipse((x-r,y-r,x+r,y+r),fill=(255,255,250,255))
+            return restored
         canvas=Image.new('RGBA',(self.size,self.size))
         self._halo(canvas,t)
         if t<.285:

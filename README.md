@@ -110,9 +110,9 @@ cartoon rig. The live preview renders as quickly as the host can manage, with a
 
 A separate deterministic Python renderer spins a supplied skull illustration, shatters its original pixels into crystal shards, releases four screaming spectral ghosts, and reforms the skull through a vortex. It exports every RGBA PNG frame plus a transparent GIF and optional full-alpha APNG.
 
-See [Spectral Skull instructions](README_SPECTRAL.md). **Supply your own original image** via `--source` (the code repository does not include image rights/assets).
+See [Spectral Skull instructions](README_SPECTRAL.md). The uploaded original artwork is checked in as `spectral_skull/assets_source.jpg`; use `--source` to substitute another illustration.
 
 ```sh
 python -m pip install -e .
-python -m spectral_skull --source path/to/skull.jpg --output renders/spectral_skull.gif --size 768 --fps 25 --apng renders/spectral_skull.png
+python -m spectral_skull --source spectral_skull/assets_source.jpg --output renders/spectral_skull.gif --size 768 --fps 25 --apng renders/spectral_skull.png
 ```

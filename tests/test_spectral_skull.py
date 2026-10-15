@@ -11,6 +11,8 @@ class SpectralSkullTests(unittest.TestCase):
         cls.scene=Scene(ASSET,192,seed=42)
     def test_loop_is_exact(self):
         self.assertEqual(self.scene.image(0).tobytes(),self.scene.image(DURATION).tobytes())
+    def test_last_exported_frame_is_exactly_first(self):
+        self.assertEqual(self.scene.frame(149,25).tobytes(),self.scene.frame(0,25).tobytes())
     def test_alpha(self):
         frame=self.scene.image(0)
         self.assertEqual(frame.mode,'RGBA')

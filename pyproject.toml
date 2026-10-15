@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "boo-gie-ghost-party"
+version = "1.0.0"
+description = "A procedural sheet ghost, dancing skeleton, and looping Halloween GIF"
+requires-python = ">=3.10"
+dependencies = ["pygame>=2.6.1,<3", "Pillow>=10.4,<13"]
+
+[project.scripts]
+ghost-party = "ghost_party.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ghost_party*"]

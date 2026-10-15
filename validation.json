@@ -1,0 +1,18 @@
+{
+  "frames": 300,
+  "size": [
+    640,
+    480
+  ],
+  "duration_ms": 12000,
+  "loop": 0,
+  "palette_mean_absolute_error": 1.7356868489583333,
+  "loop_boundary_mean_absolute_difference": 0.3644249131944444,
+  "tests_passed": 5,
+  "versions": {
+    "python": "3.12",
+    "pygame": "2.6.1",
+    "Pillow": "11.3.0"
+  },
+  "preview_note": "Desktop window not interactively tested in this headless environment."
+}

@@ -102,3 +102,17 @@ layout, timings, and poses are ordinary editable Python values. The sheet uses
 layered vector shapes, not a physical cloth simulation; bones use an articulated
 cartoon rig. The live preview renders as quickly as the host can manage, with a
 60 fps clock cap; the GIF always uses the requested fixed frame rate.
+
+
+---
+
+## 💎 Spectral Skull Vortex (transparent)
+
+A separate deterministic Python renderer spins a supplied skull illustration, shatters its original pixels into crystal shards, releases four screaming spectral ghosts, and reforms the skull through a vortex. It exports every RGBA PNG frame plus a transparent GIF and optional full-alpha APNG.
+
+See [Spectral Skull instructions](README_SPECTRAL.md). **Supply your own original image** via `--source` (the code repository does not include image rights/assets).
+
+```sh
+python -m pip install -e .
+python -m spectral_skull --source path/to/skull.jpg --output renders/spectral_skull.gif --size 768 --fps 25 --apng renders/spectral_skull.png
+```

@@ -1,0 +1,50 @@
+name: Render transparent spectral skull
+on:
+  push:
+    paths:
+      - 'spectral_skull/**'
+      - 'pyproject.toml'
+      - '.github/workflows/render-spectral-skull.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  spectral-skull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install renderer
+        run: python -m pip install -e .
+      - name: Render 150 RGBA frames and GIF
+        run: |
+          python -m spectral_skull \
+            --source spectral_skull/assets_source.jpg \
+            --output renders/spectral_skull.gif \
+            --frames-dir /tmp/spectral-skull-rgba-frames \
+            --size 768 --fps 25 --seed 42
+      - name: Publish all 150 PNG frames as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spectral-skull-150-transparent-frames
+          path: /tmp/spectral-skull-rgba-frames/frame_*.png
+          if-no-files-found: error
+          compression-level: 6
+      - name: Commit full-quality GIF to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add renders/spectral_skull.gif
+          if ! git diff --cached --quiet; then
+            git commit -m "Render 150-frame spectral skull GIF [skip ci]"
+            git push origin HEAD:main
+          fi

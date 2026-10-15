@@ -1,6 +1,8 @@
 """Headless exporters: lossless PNG sequence and APNG + transparent GIF."""
 from __future__ import annotations
 from pathlib import Path
+import shutil
+import subprocess
 from PIL import Image
 import numpy as np
 from .scene import Scene, DURATION
@@ -29,6 +31,9 @@ def render(source, output='renders/spectral_skull.gif', size=768, fps=25,
     out=Path(output);out.parent.mkdir(parents=True,exist_ok=True)
     directory=Path(frames_dir) if frames_dir else out.parent/'spectral_skull_frames'
     directory.mkdir(parents=True,exist_ok=True)
+    # Prevent stale frames when rerendering the same folder at a new FPS.
+    for stale in directory.glob('frame_????.png'):
+        stale.unlink()
     scene=Scene(source,size=size,seed=seed)
     count=round(DURATION*fps)
     for i in range(count):
@@ -56,11 +61,20 @@ def render(source, output='renders/spectral_skull.gif', size=768, fps=25,
             if check.info.get('transparency')!=0:raise RuntimeError('GIF has no transparency index')
     if apng:
         p=Path(apng);p.parent.mkdir(parents=True,exist_ok=True)
-        # PNG animation supports 256 alpha levels, unlike GIF.
-        images=[]
-        for path in paths:
-            with Image.open(path) as f:images.append(f.convert('RGBA'))
-        images[0].save(p,save_all=True,append_images=images[1:],duration=1000//fps,
-                       loop=0,format='PNG',disposal=0,blend=0,compress_level=5)
+        # Use optional fast ffmpeg backend, preserving full 8-bit alpha.
+        # Pillow remains a pure-Python fallback on systems without ffmpeg.
+        ffmpeg=shutil.which('ffmpeg')
+        if ffmpeg:
+            subprocess.run([ffmpeg,'-hide_banner','-loglevel','error','-threads','2',
+                            '-framerate',str(fps),'-i',str(directory/'frame_%04d.png'),
+                            '-plays','0','-f','apng','-y',str(p)],check=True)
+        else:
+            images=[]
+            for path in paths:
+                with Image.open(path) as f:images.append(f.convert('RGBA'))
+            images[0].save(p,save_all=True,append_images=images[1:],duration=1000//fps,
+                           loop=0,format='PNG',disposal=0,blend=0,compress_level=5)
+        with Image.open(p) as check:
+            if check.n_frames != count:raise RuntimeError('APNG missing frames')
     return {'frames':count,'size':size,'fps':fps,'seconds':DURATION,
             'gif':str(out) if gif else None,'frames_dir':str(directory),'apng':str(apng) if apng else None}

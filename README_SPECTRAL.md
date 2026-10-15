@@ -11,7 +11,9 @@ python -m pip install -e .
 python -m spectral_skull --source spectral_skull/assets_source.jpg --output renders/spectral_skull.gif --size 768 --fps 25 --apng renders/spectral_skull.png
 ```
 
-Or use `spectral-skull` after installation. The original uploaded artwork is included as `spectral_skull/assets_source.jpg`. Pass a different `--source` to animate another skull. The default render writes **150 distinct 768x768 RGBA PNG frames** to `renders/spectral_skull_frames/` plus a 150-frame transparent GIF and optional APNG. GIF supports only a 1-bit transparency index; the individual PNGs and APNG preserve soft alpha. `--size`, `--fps`, `--seed`, `--frames-dir` and `--no-gif` are configurable. Valid GIF FPS: 10, 20, 25, 50. Rendering is headless.
+Or use `spectral-skull` after installation. The original uploaded artwork is included as `spectral_skull/assets_source.jpg`. Pass a different `--source` to animate another skull. The default render writes **150 distinct 768x768 RGBA PNG frames** to `renders/spectral_skull_frames/` plus a 150-frame transparent GIF and optional APNG. GIF supports only a 1-bit transparency index; the individual PNGs and APNG preserve soft alpha. `--size`, `--fps`, `--seed`, `--frames-dir` and `--no-gif` are configurable. Valid GIF FPS: 10, 20, 25, 50. Rendering is headless. APNG export uses ffmpeg when available, otherwise Pillow. The dedicated frame folder is regenerated cleanly each run.
+
+The GitHub Actions [render workflow](.github/workflows/render-spectral-skull.yml) also produces the complete GIF and uploads every lossless RGBA frame as a build artifact.
 
 ## Timeline (6 seconds, loops)
 

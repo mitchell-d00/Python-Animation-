@@ -10,7 +10,11 @@ assets. Inspired by and reworked from the supplied sheet-ghost animation.
 
 ![Boo-gie Nights — a sheet ghost and dancing skeleton](renders/ghost_dance.gif)
 
-[Download GIF](renders/ghost_dance.gif) · [PNG poster](renders/ghost_poster.png)
+[Download preview GIF](renders/ghost_dance.gif) · [PNG poster](renders/ghost_poster.png)
+
+The checked-in GIF is a compact **320 × 240, 10 fps** preview with the full
+12-second loop. Run the default command below to render the full-quality
+**640 × 480, 25 fps** version. `validation.json` records that full-quality render.
 
 ## Quick start
 
